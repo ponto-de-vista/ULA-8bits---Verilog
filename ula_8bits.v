@@ -21,13 +21,13 @@ module ula_8bits(A, B, Sel_Op, Resultado, Maior, Menor, Igual);
     wire [7:0] resultado_logico;
     wire carry_soma, carry_subtracao;
 
-    // Operações aritméticas
+    //Operações aritméticas
     somador_8bits somador(.A(A), .B(B), .S(soma), .C_out(carry_soma));
     subtrator_8bits subtrator(.A(A), .B(B), .S(subtracao), .C_out(carry_subtracao));
     multiplicador_8bits multiplicador(.A(A), .B(B), .P(multiplicacao));
     divisor_8bits divisor(.A(A), .B(B), .Q(quociente), .R(resto));
 
-    // Operações lógicas (bit a bit)
+    //Operações lógicas (bit a bit)
     genvar i;
     generate
         for(i = 0; i < 8; i = i + 1) begin : logical_ops
@@ -40,7 +40,7 @@ module ula_8bits(A, B, Sel_Op, Resultado, Maior, Menor, Igual);
             porta_nor nor_op(.A(A[i]), .B(B[i]), .S(nor_ab));
             porta_xor xor_op(.A(A[i]), .B(B[i]), .S(xor_ab));
 
-            // Seletor para operações lógicas
+            //Seletor para operações lógicas
             assign resultado_logico[i] = (Sel_Op == 4'b0110) ? and_ab :
                                          (Sel_Op == 4'b0111) ? or_ab :
                                          (Sel_Op == 4'b1000) ? nand_ab :
@@ -50,15 +50,15 @@ module ula_8bits(A, B, Sel_Op, Resultado, Maior, Menor, Igual);
         end
     endgenerate
 
-    // Comparador
+    //Comparador
     comparador_8bits comparador(.A(A), .B(B), .Maior(Maior), .Menor(Menor), .Igual(Igual));
 
-    // Seletor de operação
-    assign Resultado = (Sel_Op == 4'b0000) ? {{8{soma[7]}}, soma} :           // Soma
-                       (Sel_Op == 4'b0001) ? {{8{subtracao[7]}}, subtracao} : // Subtração
-                       (Sel_Op == 4'b0010) ? multiplicacao :                   // Multiplicação
-                       (Sel_Op == 4'b0011) ? {{8{quociente[7]}}, quociente} :  // Divisão (quociente)
-                       (Sel_Op == 4'b0100) ? {{8{resto[7]}}, resto} :          // Divisão (resto)
+    //Seletor de operação
+    assign Resultado = (Sel_Op == 4'b0000) ? {{8{soma[7]}}, soma} :           //Soma
+                       (Sel_Op == 4'b0001) ? {{8{subtracao[7]}}, subtracao} : //Subtração
+                       (Sel_Op == 4'b0010) ? multiplicacao :                   //Multiplicação
+                       (Sel_Op == 4'b0011) ? {{8{quociente[7]}}, quociente} :  //Divisão (quociente)
+                       (Sel_Op == 4'b0100) ? {{8{resto[7]}}, resto} :          //Divisão (resto)
                        (Sel_Op == 4'b0110 | Sel_Op == 4'b0111 | Sel_Op == 4'b1000 | Sel_Op == 4'b1001 | Sel_Op == 4'b1010 | Sel_Op == 4'b1011) ? {{8{1'b0}}, resultado_logico} : // Operações lógicas
                        16'bxxxxxxxxxxxxxxxx;
 

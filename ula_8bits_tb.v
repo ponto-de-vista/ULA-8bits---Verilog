@@ -11,6 +11,9 @@ module ula_8bits_tb();
                    .Maior(Maior), .Menor(Menor), .Igual(Igual));
     
     initial begin
+        $dumpfile("ula_8bits_tb.vcd");
+        $dumpvars(0, ula_8bits_tb);
+
         $display("===== TESTE DA ULA 8 BITS =====");
         $display("Formato: Sel_Op | A | B | Resultado | Maior | Menor | Igual | Overflow");
         $display("================================");
@@ -40,8 +43,8 @@ module ula_8bits_tb();
         
         // Teste 4: Multiplicacao (Sel_Op = 0010)
         $display("\n--- OPERACAO DE MULTIPLICACAO (Sel_Op = 0010) ---");
-        A = 8'd1;
-        B = 8'd128;
+        A = 8'd3;
+        B = 8'd90;
         Sel_Op = 4'b0010;
         #10;
         $display("Multiplicacao: %d * %d = %d (esperado: 128)", A, B, Resultado);

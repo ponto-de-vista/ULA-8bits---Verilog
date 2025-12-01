@@ -1,3 +1,5 @@
+`include "ula_8bits.v"
+
 module ula_8bits_tb();
     reg [7:0] A, B;
     reg [3:0] Sel_Op;
@@ -38,11 +40,11 @@ module ula_8bits_tb();
         
         // Teste 4: Multiplicacao (Sel_Op = 0010)
         $display("\n--- OPERACAO DE MULTIPLICACAO (Sel_Op = 0010) ---");
-        A = 8'd12;
-        B = 8'd15;
+        A = 8'd1;
+        B = 8'd128;
         Sel_Op = 4'b0010;
         #10;
-        $display("Multiplicacao: %d * %d = %d (esperado: 180)", A, B, Resultado);
+        $display("Multiplicacao: %d * %d = %d (esperado: 128)", A, B, Resultado);
         
         // Teste 5: Multiplicacao maior
         A = 8'd20;

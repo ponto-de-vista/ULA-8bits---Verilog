@@ -1,3 +1,6 @@
+`include "meio_somador.v"
+`include "somador_completo.v"
+
 module somador_8bits(A, B, S, C_out);
     input [7:0] A, B;
     output [7:0] S;

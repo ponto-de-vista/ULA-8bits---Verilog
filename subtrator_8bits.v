@@ -1,3 +1,6 @@
+`include "meio_subtrator.v"
+`include "subtrator_completo.v"
+
 module subtrator_8bits(A, B, S, C_out);
     input [7:0] A, B;
     output [7:0] S;

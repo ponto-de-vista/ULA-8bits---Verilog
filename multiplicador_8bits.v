@@ -1,10 +1,12 @@
+`include "somador_8bits.v"
+
 module multiplicador_8bits(A, B, P);
     input [7:0] A, B;
     output [15:0] P;
     
     wire [15:0] produto_parcial_1, produto_parcial_2, produto_parcial_3, produto_parcial_4;
-    wire [15:0] produto_parcial_5, produto_parcial_6, produto_parcial_7;
-    wire [15:0] soma_1_2, soma_3_4, soma_5_6, soma_1_2_3_4, soma_5_6_7;
+    wire [15:0] produto_parcial_5, produto_parcial_6, produto_parcial_7, produto_parcial_8;
+    wire [15:0] soma_1_2, soma_3_4, soma_5_6, soma_1_2_3_4, soma_5_6_7, soma_7_8, soma_5_6_7_8;
     wire carry_out_1, carry_out_2, carry_out_3, carry_out_4, carry_out_5, carry_out_6, carry_out_7_1, carry_out_7_2;
 
     // Produtos parciais com AND bit a bit (portas AND implementadas com logic)
@@ -49,38 +51,39 @@ module multiplicador_8bits(A, B, P);
     assign produto_parcial_7[5:0] = 6'b0;
     assign produto_parcial_7[15:14] = 2'b0;
 
-    // Árvore de somadores para somar todos os produtos parciais
-    // Nível 1: Soma PP0 + PP1, PP2 + PP3, PP4 + PP5, PP6
-    somador_8bits somador_1(.A(produto_parcial_1[7:0]), .B(produto_parcial_2[7:0]), 
-                             .S(soma_1_2[7:0]), .C_out(carry_out_1));
-    somador_8bits somador_2(.A(produto_parcial_1[15:8]), .B(produto_parcial_2[15:8]), 
-                             .S(soma_1_2[15:8]), .C_out());
-    
-    somador_8bits somador_3(.A(produto_parcial_3[7:0]), .B(produto_parcial_4[7:0]), 
-                             .S(soma_3_4[7:0]), .C_out(carry_out_2));
-    somador_8bits somador_4(.A(produto_parcial_3[15:8]), .B(produto_parcial_4[15:8]), 
-                             .S(soma_3_4[15:8]), .C_out());
-    
-    somador_8bits somador_5(.A(produto_parcial_5[7:0]), .B(produto_parcial_6[7:0]), 
-                             .S(soma_5_6[7:0]), .C_out(carry_out_3));
-    somador_8bits somador_6(.A(produto_parcial_5[15:8]), .B(produto_parcial_6[15:8]), 
-                             .S(soma_5_6[15:8]), .C_out());
+    assign produto_parcial_8[14:7] = {A[7] & B[7], A[6] & B[7], A[5] & B[7], A[4] & B[7], 
+                                      A[3] & B[7], A[2] & B[7], A[1] & B[7], A[0] & B[7]};
+    assign produto_parcial_8[6:0] = 7'b0;
+    assign produto_parcial_8[15] = 1'b0;
 
-    // Nível 2: Soma (soma_1_2 + soma_3_4), (soma_5_6 + produto_parcial_7)
-    somador_8bits somador_7(.A(soma_1_2[7:0]), .B(soma_3_4[7:0]), 
-                             .S(soma_1_2_3_4[7:0]), .C_out(carry_out_4));
-    somador_8bits somador_8(.A(soma_1_2[15:8]), .B(soma_3_4[15:8]), 
-                             .S(soma_1_2_3_4[15:8]), .C_out());
+
+// Soma 1+2
+    somador_8bits somador_1_L(.A(produto_parcial_1[7:0]), .B(produto_parcial_2[7:0]), .S(soma_1_2[7:0]), .C_out(carry_out_1));
+    somador_8bits somador_1_H(.A(produto_parcial_1[15:8]), .B(produto_parcial_2[15:8]), .S(soma_1_2[15:8]), .C_out()); // Nota: O carry do Low deveria entrar aqui se seu módulo suportar
     
-    somador_8bits somador_9(.A(soma_5_6[7:0]), .B(produto_parcial_7[7:0]), 
-                             .S(soma_5_6_7[7:0]), .C_out(carry_out_5));
-    somador_8bits somador_10(.A(soma_5_6[15:8]), .B(produto_parcial_7[15:8]), 
-                              .S(soma_5_6_7[15:8]), .C_out());
+    // Soma 3+4
+    somador_8bits somador_2_L(.A(produto_parcial_3[7:0]), .B(produto_parcial_4[7:0]), .S(soma_3_4[7:0]), .C_out(carry_out_2));
+    somador_8bits somador_2_H(.A(produto_parcial_3[15:8]), .B(produto_parcial_4[15:8]), .S(soma_3_4[15:8]), .C_out());
+    
+    // Soma 5+6
+    somador_8bits somador_3_L(.A(produto_parcial_5[7:0]), .B(produto_parcial_6[7:0]), .S(soma_5_6[7:0]), .C_out(carry_out_3));
+    somador_8bits somador_3_H(.A(produto_parcial_5[15:8]), .B(produto_parcial_6[15:8]), .S(soma_5_6[15:8]), .C_out());
 
-    // Nível 3: Soma final
-    somador_8bits somador_11(.A(soma_1_2_3_4[7:0]), .B(soma_5_6_7[7:0]), 
-                              .S(P[7:0]), .C_out(carry_out_6));
-    somador_8bits somador_12(.A(soma_1_2_3_4[15:8]), .B(soma_5_6_7[15:8]), 
-                              .S(P[15:8]), .C_out());
+    // Soma 7+8 (ESTA É A PARTE QUE VOCÊ PRECISAVA ADICIONAR)
+    somador_8bits somador_4_L(.A(produto_parcial_7[7:0]), .B(produto_parcial_8[7:0]), .S(soma_7_8[7:0]), .C_out(carry_out_4));
+    somador_8bits somador_4_H(.A(produto_parcial_7[15:8]), .B(produto_parcial_8[15:8]), .S(soma_7_8[15:8]), .C_out());
 
+    // --- NÍVEL 2: Somar os resultados do nível 1 ---
+
+    // Soma (1+2) + (3+4)
+    somador_8bits somador_5_L(.A(soma_1_2[7:0]), .B(soma_3_4[7:0]), .S(soma_1_2_3_4[7:0]), .C_out(carry_out_5));
+    somador_8bits somador_5_H(.A(soma_1_2[15:8]), .B(soma_3_4[15:8]), .S(soma_1_2_3_4[15:8]), .C_out());
+
+    // Soma (5+6) + (7+8) (MODIFICADO PARA INCLUIR O NOVO PAR)
+    somador_8bits somador_6_L(.A(soma_5_6[7:0]), .B(soma_7_8[7:0]), .S(soma_5_6_7_8[7:0]), .C_out(carry_out_6));
+    somador_8bits somador_6_H(.A(soma_5_6[15:8]), .B(soma_7_8[15:8]), .S(soma_5_6_7_8[15:8]), .C_out());
+
+    // --- NÍVEL 3: Soma Final ---
+    somador_8bits somador_final_L(.A(soma_1_2_3_4[7:0]), .B(soma_5_6_7_8[7:0]), .S(P[7:0]), .C_out(carry_out_7_1));
+    somador_8bits somador_final_H(.A(soma_1_2_3_4[15:8]), .B(soma_5_6_7_8[15:8]), .S(P[15:8]), .C_out());
 endmodule

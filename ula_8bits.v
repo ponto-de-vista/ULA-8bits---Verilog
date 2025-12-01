@@ -1,3 +1,14 @@
+`include "subtrator_8bits.v"
+`include "multiplicador_8bits.v"
+`include "divisor_8bits.v"
+`include "comparador_8bits.v"
+`include "porta_and.v"
+`include "porta_or.v"
+`include "porta_not.v"
+`include "porta_nand.v"
+`include "porta_nor.v"
+`include "porta_xor.v"
+
 module ula_8bits(A, B, Sel_Op, Resultado, Maior, Menor, Igual);
     input [7:0] A, B;
     input [3:0] Sel_Op;

@@ -1,4 +1,8 @@
-`include "somador_8bits.v"
+`ifndef MULTIPLICADOR_8BITS
+`define MULTIPLICADOR_8BITS
+
+`include "meio_somador.v"
+`include "somador_completo.v"
 
 module multiplicador_8bits(
     input [7:0] A, 
@@ -99,3 +103,5 @@ module multiplicador_8bits(
 
     somador_completo FA_st7_7 (.A(pp7[7]), .B(c_st6[7]), .C_in(c_st7[6]), .S(P[14]), .C_out(P[15]));
 endmodule
+
+`endif

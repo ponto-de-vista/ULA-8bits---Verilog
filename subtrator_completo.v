@@ -1,3 +1,6 @@
+`ifndef SUBTRATOR_COMPLETO
+`define SUBTRATOR_COMPLETO
+
 module subtrator_completo(A, B, C_in, S, C_out);
 
     input A, B, C_in;
@@ -7,3 +10,5 @@ module subtrator_completo(A, B, C_in, S, C_out);
     assign C_out = (~A & B) | (~A & C_in) | (B & C_in);
 
 endmodule
+
+`endif

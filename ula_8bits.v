@@ -1,4 +1,8 @@
+`ifndef ULA_8BITS
+`define ULA_8BITS
+
 `include "subtrator_8bits.v"
+`include "somador_8bits.v"
 `include "multiplicador_8bits.v"
 `include "divisor_8bits.v"
 `include "comparador_8bits.v"
@@ -63,3 +67,5 @@ module ula_8bits(A, B, Sel_Op, Resultado, Maior, Menor, Igual);
                        16'bxxxxxxxxxxxxxxxx;
 
 endmodule
+
+`endif

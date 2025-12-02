@@ -1,3 +1,6 @@
+`ifndef SOMADOR_8BITS
+`define SOMADOR_8BITS
+
 `include "meio_somador.v"
 `include "somador_completo.v"
 
@@ -16,3 +19,5 @@ module somador_8bits(A, B, S, C_out);
     somador_completo sc_5(.A(A[6]), .B(B[6]), .C_in(c[5]), .S(S[6]), .C_out(c[6]));
     somador_completo sc_6(.A(A[7]), .B(B[7]), .C_in(c[6]), .S(S[7]), .C_out(C_out));
 endmodule
+
+`endif

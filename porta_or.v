@@ -7,5 +7,4 @@ module porta_or(A, B, S);
 
     assign S = A | B;
 endmodule
-
 `endif

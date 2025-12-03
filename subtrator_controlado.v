@@ -29,5 +29,4 @@ module celula_cs(
     assign R_out = (Sel) ? Diff : X;
 
 endmodule
-
 `endif

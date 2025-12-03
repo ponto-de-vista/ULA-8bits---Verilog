@@ -7,5 +7,4 @@ module porta_not(A, S);
 
     assign S = ~A;
 endmodule
-
 `endif

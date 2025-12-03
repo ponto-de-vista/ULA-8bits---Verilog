@@ -16,7 +16,7 @@
 module ula_8bits(A, B, Sel_Op, Resultado, Maior, Menor, Igual);
     input [7:0] A, B;
     input [3:0] Sel_Op;
-    output [15:0] Resultado;
+    output reg [15:0] Resultado;
     output Maior, Menor, Igual;
 
     wire [7:0] soma, subtracao;
@@ -57,15 +57,22 @@ module ula_8bits(A, B, Sel_Op, Resultado, Maior, Menor, Igual);
     //Comparador
     comparador_8bits comparador(.A(A), .B(B), .Maior(Maior), .Menor(Menor), .Igual(Igual));
 
-    //Seletor de operação
-    assign Resultado = (Sel_Op == 4'b0000) ? {{8{soma[7]}}, soma} :           //Soma
-                       (Sel_Op == 4'b0001) ? {{8{subtracao[7]}}, subtracao} : //Subtração
-                       (Sel_Op == 4'b0010) ? multiplicacao :                   //Multiplicação
-                       (Sel_Op == 4'b0011) ? {{8{quociente[7]}}, quociente} :  //Divisão (quociente)
-                       (Sel_Op == 4'b0100) ? {{8{resto[7]}}, resto} :          //Divisão (resto)
-                       (Sel_Op == 4'b0110 | Sel_Op == 4'b0111 | Sel_Op == 4'b1000 | Sel_Op == 4'b1001 | Sel_Op == 4'b1010 | Sel_Op == 4'b1011) ? {{8{1'b0}}, resultado_logico} : // Operações lógicas
-                       16'bxxxxxxxxxxxxxxxx;
-
+    always @(*) begin
+        case(Sel_Op)
+            4'b0000 : Resultado = {8'b0, soma}; // Soma
+            4'b0001 : Resultado = {8'b0, subtracao}; // Subtração
+            4'b0010 : Resultado = multiplicacao; // Multiplicação
+            4'b0011 : Resultado = {8'b0, quociente}; // Divisão (quociente)
+            4'b0100 : Resultado = {8'b0, resto}; // Divisão (resto)
+            4'b0110 : Resultado = {8'b0, resultado_logico}; // AND
+            4'b0111 : Resultado = {8'b0, resultado_logico}; // OR
+            4'b1000 : Resultado = {8'b0, resultado_logico}; // NAND
+            4'b1001 : Resultado = {8'b0, resultado_logico}; // NOR
+            4'b1010 : Resultado = {8'b0, resultado_logico}; // XOR
+            4'b1011 : Resultado = {8'b0, resultado_logico}; // NOT
+            default : Resultado = 16'b0;
+        endcase
+    end
 endmodule
 
 `endif

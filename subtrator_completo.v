@@ -10,5 +10,4 @@ module subtrator_completo(A, B, C_in, S, C_out);
     assign C_out = (~A & B) | (~A & C_in) | (B & C_in);
 
 endmodule
-
 `endif

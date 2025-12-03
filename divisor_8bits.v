@@ -10,17 +10,12 @@ module divisor_8bits(
     output [7:0] R  // Resto
 );
 
-    // ========================================================================
-    // LINHA 0 (Processa A[7])
-    // Entrada X = {0,0,0,0,0,0,0, A[7]}
-    // ========================================================================
-    wire [7:0] rem0;   // Resto da linha 0
-    wire [8:0] b0;     // Borrows da linha 0
-    wire sel0;         // Controle da linha 0
+    wire [7:0] rem0;
+    wire [8:0] b0;
+    wire sel0;
 
-    assign b0[0] = 1'b0; // Primeiro borrow é sempre 0
+    assign b0[0] = 1'b0; 
 
-    // Instâncias manuais (bit a bit)
     celula_cs cs0_0 (.X(A[7]), .Y(B[0]), .B_in(b0[0]), .Sel(sel0), .R_out(rem0[0]), .B_out(b0[1]));
     celula_cs cs0_1 (.X(1'b0), .Y(B[1]), .B_in(b0[1]), .Sel(sel0), .R_out(rem0[1]), .B_out(b0[2]));
     celula_cs cs0_2 (.X(1'b0), .Y(B[2]), .B_in(b0[2]), .Sel(sel0), .R_out(rem0[2]), .B_out(b0[3]));
@@ -34,11 +29,6 @@ module divisor_8bits(
     assign sel0 = ~b0[8];
     assign Q[7] = sel0;
 
-
-    // ========================================================================
-    // LINHA 1 (Processa A[6])
-    // Entrada X deslocada: bit 0 recebe A[6], bit 1 recebe rem0[0], etc.
-    // ========================================================================
     wire [7:0] rem1; wire [8:0] b1; wire sel1;
     assign b1[0] = 1'b0;
 
@@ -54,10 +44,6 @@ module divisor_8bits(
     assign sel1 = ~b1[8];
     assign Q[6] = sel1;
 
-
-    // ========================================================================
-    // LINHA 2 (Processa A[5])
-    // ========================================================================
     wire [7:0] rem2; wire [8:0] b2; wire sel2;
     assign b2[0] = 1'b0;
 
@@ -73,10 +59,6 @@ module divisor_8bits(
     assign sel2 = ~b2[8];
     assign Q[5] = sel2;
 
-
-    // ========================================================================
-    // LINHA 3 (Processa A[4])
-    // ========================================================================
     wire [7:0] rem3; wire [8:0] b3; wire sel3;
     assign b3[0] = 1'b0;
 
@@ -92,10 +74,6 @@ module divisor_8bits(
     assign sel3 = ~b3[8];
     assign Q[4] = sel3;
 
-
-    // ========================================================================
-    // LINHA 4 (Processa A[3])
-    // ========================================================================
     wire [7:0] rem4; wire [8:0] b4; wire sel4;
     assign b4[0] = 1'b0;
 
@@ -111,10 +89,6 @@ module divisor_8bits(
     assign sel4 = ~b4[8];
     assign Q[3] = sel4;
 
-
-    // ========================================================================
-    // LINHA 5 (Processa A[2])
-    // ========================================================================
     wire [7:0] rem5; wire [8:0] b5; wire sel5;
     assign b5[0] = 1'b0;
 
@@ -130,10 +104,6 @@ module divisor_8bits(
     assign sel5 = ~b5[8];
     assign Q[2] = sel5;
 
-
-    // ========================================================================
-    // LINHA 6 (Processa A[1])
-    // ========================================================================
     wire [7:0] rem6; wire [8:0] b6; wire sel6;
     assign b6[0] = 1'b0;
 
@@ -149,10 +119,6 @@ module divisor_8bits(
     assign sel6 = ~b6[8];
     assign Q[1] = sel6;
 
-
-    // ========================================================================
-    // LINHA 7 (Processa A[0]) - FIM
-    // ========================================================================
     wire [7:0] rem7; wire [8:0] b7; wire sel7;
     assign b7[0] = 1'b0;
 
@@ -168,9 +134,6 @@ module divisor_8bits(
     assign sel7 = ~b7[8];
     assign Q[0] = sel7;
 
-    // SAÍDA FINAL: RESTO
     assign R = rem7;
-
 endmodule
-
 `endif

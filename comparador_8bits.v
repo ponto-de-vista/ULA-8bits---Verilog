@@ -9,5 +9,4 @@ module comparador_8bits(A, B, Maior, Menor, Igual);
     assign Menor = (A < B) ? 1 : 0;
     assign Igual = (A == B) ? 1 : 0;
 endmodule
-
 `endif

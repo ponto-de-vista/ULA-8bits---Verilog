@@ -7,5 +7,4 @@ module porta_nor(A, B, S);
 
     assign S = ~(A | B);
 endmodule
-
 `endif

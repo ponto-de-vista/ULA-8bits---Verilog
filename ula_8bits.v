@@ -13,17 +13,17 @@
 `include "porta_nor.v"
 `include "porta_xor.v"
 
-module ula_8bits(A, B, Sel_Op, Resultado, Maior, Menor, Igual);
+module ula_8bits(A, B, Sel_Op, Resultado);
     input [7:0] A, B;
     input [3:0] Sel_Op;
     output reg [15:0] Resultado;
-    output Maior, Menor, Igual;
 
     wire [7:0] soma, subtracao;
     wire [15:0] multiplicacao;
     wire [7:0] quociente, resto;
     wire [7:0] resultado_logico;
     wire carry_soma, carry_subtracao;
+    wire Maior, Menor, Igual;
 
     //Operações aritméticas
     somador_8bits somador(.A(A), .B(B), .S(soma), .C_out(carry_soma));
@@ -57,6 +57,7 @@ module ula_8bits(A, B, Sel_Op, Resultado, Maior, Menor, Igual);
     //Comparador
     comparador_8bits comparador(.A(A), .B(B), .Maior(Maior), .Menor(Menor), .Igual(Igual));
 
+    //Seletor de operação com CASE
     always @(*) begin
         case(Sel_Op)
             4'b0000 : Resultado = {8'b0, soma}; // Soma
@@ -70,9 +71,11 @@ module ula_8bits(A, B, Sel_Op, Resultado, Maior, Menor, Igual);
             4'b1001 : Resultado = {8'b0, resultado_logico}; // NOR
             4'b1010 : Resultado = {8'b0, resultado_logico}; // XOR
             4'b1011 : Resultado = {8'b0, resultado_logico}; // NOT
+            4'b1100 : Resultado = {14'b0, Maior ? 2'd2 : (Menor ? 2'd1 : 2'd0)}; // Comparação
             default : Resultado = 16'b0;
         endcase
     end
+
 endmodule
 
 `endif

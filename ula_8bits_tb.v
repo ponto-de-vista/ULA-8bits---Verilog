@@ -4,11 +4,9 @@ module ula_8bits_tb();
     reg [7:0] A, B;
     reg [3:0] Sel_Op;
     wire [15:0] Resultado;
-    wire Maior, Menor, Igual;
     
-    // Instancia a ULA
-    ula_8bits ula(.A(A), .B(B), .Sel_Op(Sel_Op), .Resultado(Resultado), 
-                   .Maior(Maior), .Menor(Menor), .Igual(Igual));
+    // Instancia a ULA (sem Maior, Menor, Igual)
+    ula_8bits ula(.A(A), .B(B), .Sel_Op(Sel_Op), .Resultado(Resultado));
     
     initial begin
         $dumpfile("ula_8bits_tb.vcd");
@@ -111,27 +109,28 @@ module ula_8bits_tb();
         #10;
         $display("NOT: NOT %b = %b", A, Resultado[7:0]);
         
+        //Comparador (0 para igual, 1 para menor e 2 para maior):
         //Comparacao - Maior
-        $display("\nOPERACAO COMPARACAO:");
+        $display("\nOPERACAO COMPARACAO (0 para igual, 1 para menor e 2 para maior):");
         A = 8'd50;
         B = 8'd30;
-        Sel_Op = 4'b0000;
+        Sel_Op = 4'b1100;
         #10;
-        $display("Comparacao: %d > %d ? Maior=%b, Menor=%b, Igual=%b", A, B, Maior, Menor, Igual);
+        $display("Comparacao: %d > %d ? Resultado = %b", A, B, Resultado[1:0]);
         
         //Comparacao - Menor
         A = 8'd20;
         B = 8'd80;
-        Sel_Op = 4'b0000;
+        Sel_Op = 4'b1100;
         #10;
-        $display("Comparacao: %d < %d ? Maior=%b, Menor=%b, Igual=%b", A, B, Maior, Menor, Igual);
+        $display("Comparacao: %d < %d ? Resultado = %b", A, B, Resultado[1:0]);
         
         //Comparacao - Igual
         A = 8'd42;
         B = 8'd42;
-        Sel_Op = 4'b0000;
+        Sel_Op = 4'b1100;
         #10;
-        $display("Comparacao: %d == %d ? Maior=%b, Menor=%b, Igual=%b", A, B, Maior, Menor, Igual);
+        $display("Comparacao: %d == %d ? Resultado = %b", A, B, Resultado[1:0]);
         
         $display("\nTESTES FINALIZADOS");
         $finish;
